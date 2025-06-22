@@ -4,14 +4,17 @@ import Footer from '@/components/Footer';
 
 type Props={
   children: React.ReactNode;
+  showHero?: boolean;
 };
 
-const Layout=({children}: Props)=>{
+const Layout=({children,showHero=false}: Props)=>{
     
   return (
     <div className="flex flex-col max-h-screen">
         <Header/>
-        <Hero/> 
+      {
+        showHero?<Hero/>:null 
+      }
         <div className="container mx-auto flex-1 py-10">
             {children}
         </div>
