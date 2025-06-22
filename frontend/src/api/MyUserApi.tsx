@@ -1,5 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -43,7 +44,7 @@ type UpdateMyUserRequest={
     const {getAccessTokenSilently}=useAuth0();
     const UpdateMyUserRequest= async (formData:UpdateMyUserRequest)=>{
         const accessToken=await getAccessTokenSilently();
-                const response = await fetch(`${API_BASE_URL}/api/my/user`, {
+            const response = await fetch(`${API_BASE_URL}/api/my/user`, {
             method: "PUT",
             headers: {
                 Authorization:`Bearer ${accessToken}`,
@@ -57,5 +58,13 @@ type UpdateMyUserRequest={
         return response.json();
     }
     const {mutateAsync:updateUser,isPending,isError,isSuccess,error,reset}=useMutation({mutationFn:UpdateMyUserRequest});
+    if(isSuccess){
+        toast.success("User updated successfully");
+    }
+    if(error){
+        toast.error(error.toString()); 
+        reset();
+    }
+
         return {updateUser,isPending};
  }
