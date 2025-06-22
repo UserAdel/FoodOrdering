@@ -6,7 +6,12 @@ import myUserRoute from "./routes/MyUserRoutes"
 
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
+}));
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_CONNECTION_STRING as string)

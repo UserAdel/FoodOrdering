@@ -1,5 +1,4 @@
 import { CircleUserRound, Menu } from 'lucide-react'
-import React from 'react'
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { Separator } from '@radix-ui/react-separator'
 import { Button } from './ui/button'

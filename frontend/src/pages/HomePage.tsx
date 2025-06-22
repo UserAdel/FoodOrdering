@@ -1,4 +1,4 @@
-import React from 'react'
+
 import landingImage from "../assets/landing.png"
 import appDownladImage from "../assets/appDownload.png"
 
