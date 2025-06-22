@@ -33,7 +33,7 @@ export const jwtParse = async (
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith("Bearer ")) {
-    res.sendStatus(401); // ❌ لا ترجع
+    res.sendStatus(401); 
     return;
   }
 
@@ -46,14 +46,14 @@ export const jwtParse = async (
     const user = await User.findOne({ auth0Id });
 
     if (!user) {
-      res.sendStatus(401); // ❌ لا ترجع
+      res.sendStatus(401); 
       return;
     }
 
     req.auth0Id = auth0Id as string;
     req.userId = user._id.toString();
-    next(); // ✅ هذا يُكمل السلسلة
+    next(); 
   } catch (error) {
-    res.sendStatus(401); // ❌ لا ترجع
+    res.sendStatus(401); 
   }
 };
