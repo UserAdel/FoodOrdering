@@ -5,6 +5,9 @@ import DetailsSection from "./DetailsSection";
 import CuisinesSection from "./CuisinesSection";
 import { Separator } from "@/components/ui/separator";
 import MenuSection from "./MenuSection";
+import ImageSection from "./ImageSection";
+import LoadingButton from "@/components/LoadingButton";
+import { Button } from "@/components/ui/button";
 
 
 
@@ -70,9 +73,13 @@ const ManageRestaurantForm = ({ onSave, isLoading }: Props) => {
         <CuisinesSection/>
         <Separator />
         <MenuSection/>
-
-        </form>
-      </FormProvider>
-    )
+        <Separator />
+        <ImageSection/>
+        {isLoading ?
+        <LoadingButton/>
+        :<Button type="submit">Submit</Button>}
+      </form>
+    </FormProvider>
+  );
 }
 export default ManageRestaurantForm;
