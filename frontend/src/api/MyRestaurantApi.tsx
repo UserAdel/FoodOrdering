@@ -75,3 +75,37 @@ const {data:restaurant, isLoading, isSuccess, error} = useQuery({
 }
 
 
+
+export const useUpdateMyRestaurant = () => {
+    const { getAccessTokenSilently } = useAuth0();
+
+    const updateRestaurantRequest = async (restaurantFormData: FormData) => {
+        const accessToken = await getAccessTokenSilently();
+        const response = await fetch(`${API_BASE_URL}/api/my/restaurant`, {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+            body: restaurantFormData,
+        });
+        if (!response.ok) {
+            const errorData = await response.json();    
+    }
+}
+
+const {mutate:updateMyRestaurant, isPending:isLoading, isSuccess, error} = useMutation({
+    mutationFn: updateRestaurantRequest
+})
+
+if (isSuccess) {
+    toast.success("Restaurant updated successfully");
+}
+if (error) {
+    toast.error(error.message);
+}
+
+return {
+    updateMyRestaurant,
+    isLoading,
+}
+}
