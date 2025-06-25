@@ -1,15 +1,18 @@
-
 import { Request, Response } from "express";
 import Restaurant from "../models/restaurant";
 import cloudinary from "cloudinary";
 import mongoose from "mongoose";
 
+
+
 const createMyRestaurant  = async (req: Request, res: Response) => {
     try {
         const existingRestaurant = await Restaurant.findOne({ user: req.userId })
+         
         if (existingRestaurant) {
             return res.status(400).json({ message: "You already have a restaurant" })
         }
+        
         const { restaurantName, city, country, deliveryPrice, estimatedDeliveryTime, cuisines, menuItems } = req.body;
         const image = req.file as Express.Multer.File;
         const base64Image = Buffer.from(image.buffer).toString("base64");
@@ -24,12 +27,33 @@ const createMyRestaurant  = async (req: Request, res: Response) => {
             restaurant.lastUpdated=new Date();
         await restaurant.save();
 
+        res.status(201).json(restaurant);
     } catch (error) {
         console.error("Error creating restaurant:", error);
         return res.status(500).json({ message: "Error creating restaurant" });
     }
 }
 
+
+const getMyRestaurant = async (req: Request, res: Response) => {
+
+
+    try {
+        const restaurant = await Restaurant.findOne({ user: req.userId });
+        if (!restaurant) {
+            return res.status(404).json({ message: "Restaurant not found" });
+        }
+            res.json(restaurant);
+
+
+    } catch (error) {
+        console.error("Error getting restaurant:", error);
+        return res.status(500).json({ message: "Error getting restaurant" });
+    }
+}
+
+
 export default {
-    createMyRestaurant 
+    createMyRestaurant,
+    getMyRestaurant
 }

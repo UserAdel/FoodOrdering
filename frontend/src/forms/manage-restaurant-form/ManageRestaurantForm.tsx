@@ -8,6 +8,8 @@ import MenuSection from "./MenuSection";
 import ImageSection from "./ImageSection";
 import LoadingButton from "@/components/LoadingButton";
 import { Button } from "@/components/ui/button";
+import { Restaurant } from "@/types";
+import { useEffect } from "react";
 
 
 
@@ -53,23 +55,46 @@ type restaurantFormData = z.infer<typeof formSchema>;
 
 type Props = {
     onSave: (restaurantFormData: FormData) => void;
+    restaurant?: Restaurant;
     isLoading: boolean;
 }
 
-const ManageRestaurantForm = ({ onSave, isLoading }: Props) => {
-    const form = useForm<restaurantFormData>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            cuisines: [],
-            menuItems: [
-                {
-                    name: "",
-                    price: 0,
-                }
-            ],
+
+const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
+  const form = useForm<restaurantFormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      cuisines: [],
+      menuItems: [
+        {
+          name: "",
+          price: 0,
         }
-    });
-    const onSubmit = (formDataJson: restaurantFormData) => {
+      ],
+    }
+  });
+
+  useEffect(() => {
+    if(!restaurant){return;}
+    const deilverPriceFormatted=parseInt((restaurant.deliveryPrice/100).toFixed(2));
+  //  const estimatedDeliveryTimeFormatted=parseInt(restaurant.estimatedDeliveryTime.toFixed(2));
+      const menuItemsFormatted=restaurant.menuItems.map((item)=>({
+       ...item,
+        price:item.price/100,
+      }));
+      const updatedRestaurant={
+        ...restaurant,
+        deliveryPrice:deilverPriceFormatted,
+        menuItems:menuItemsFormatted,
+      }
+      form.reset(updatedRestaurant);
+
+
+  }, [form,restaurant]);
+
+ 
+
+  const onSubmit = (formDataJson: restaurantFormData) => {
         const formData = new FormData();
         formData.append("restaurantName", formDataJson.restaurantName);
         formData.append("city", formDataJson.city);
