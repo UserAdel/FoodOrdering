@@ -1,8 +1,7 @@
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  Form,
   FormControl,
   FormDescription,
   FormField,
@@ -46,14 +45,12 @@ const UserProfileForm = ({
     defaultValues: currentUser,
   });
 
-
-useEffect(() => {
-  form.reset(currentUser);
-}, [currentUser, form]);
-
+  useEffect(() => {
+    form.reset(currentUser);
+  }, [currentUser, form]);
 
   return (
-    <Form {...form}>
+    <FormProvider {...form}>
       <form
         onSubmit={form.handleSubmit(onSave)}
         className="space-y-4 bg-gray-50 rounded-lg md:p-10"
@@ -140,7 +137,7 @@ useEffect(() => {
           </Button>
         )}
       </form>
-    </Form>
+    </FormProvider>
   );
 };
 
