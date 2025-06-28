@@ -15,6 +15,9 @@ export const useSearchRestaurants=(searchState:SearchState, city?:string)=>{
         if(searchState.selectedCuisines.length > 0){
             params.set("selectedCuisines",searchState.selectedCuisines.join(","))
         }
+        if(searchState.sortOption){
+            params.set("sortOption",searchState.sortOption)
+        }
         
         const response=await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/restaurant/search/${city}?${params.toString()}`)
         if(!response.ok){
@@ -24,7 +27,7 @@ export const useSearchRestaurants=(searchState:SearchState, city?:string)=>{
     }
 
 const {data:results,isLoading,error}=useQuery({
-    queryKey:["searchRestaurants",city,searchState.searchQuery,searchState.page,searchState.selectedCuisines],
+    queryKey:["searchRestaurants",city,searchState.searchQuery,searchState.page,searchState.selectedCuisines,searchState.sortOption],
     queryFn:createSearchRequest,
     enabled:!!city
 })
