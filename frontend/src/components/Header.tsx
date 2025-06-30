@@ -5,10 +5,10 @@ import MainNav from './MainNav'
 
 export default function Header() {
     return (
-        <div className='border-b-2 border-b-orange-500 py-6'>
+        <div className='border-b-2 border-b-orange-500 py-5 px-2'>
             <div className="container mx-auto flex justify-between items-center">
                 <Link to="/" className="text-3xl font-bold tracking-tight text-orange-500 ">MernEats.com</Link>
-                <div className="md:hidden">
+                <div className="md:hidden px-5">
                     <MobileNav/>
                 </div>
                 <div className="hidden md:block">
