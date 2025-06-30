@@ -4,6 +4,7 @@ import multer from "multer";
 import { jwtCheck,jwtParse} from "../middleware/auth";
 import { validateCreateRestaurantRequest } from "../middleware/validation";
 
+
 const router =express.Router();
 
 const storage=multer.memoryStorage();
@@ -15,6 +16,20 @@ const upload=multer({
 });
 
 
+
+router.get(
+    "/order",
+    jwtCheck,
+    jwtParse,
+    myResturantController.getMyRestaurantOrders as RequestHandler
+  );
+  
+  router.patch(
+    "/order/:orderId/status",
+    jwtCheck,
+    jwtParse,
+    myResturantController.updateOrderStatus as RequestHandler
+  );
 
 router.get("/",jwtCheck, jwtParse, myResturantController.getMyRestaurant as RequestHandler);
 router.post("/",upload.single("imageFile"),validateCreateRestaurantRequest,jwtCheck, jwtParse, myResturantController.createMyRestaurant as RequestHandler);

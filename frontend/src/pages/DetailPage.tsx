@@ -7,9 +7,9 @@ import { Card, CardFooter } from "@/components/ui/card";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { MenuItem as MenuItemType } from "../types";
-//import CheckoutButton from "@/components/CheckoutButton";
+import CheckoutButton from "@/components/CheckoutButton";
 import { UserFormData } from "@/forms/user-profile-form/UserProfileForm";
-//import { useCreateCheckoutSession } from "@/api/OrderApi";
+import { useCreateCheckoutSession } from "@/api/OrderApi";
 
 export type CartItem = {
   _id: string;
@@ -21,8 +21,8 @@ export type CartItem = {
 const DetailPage = () => {
   const { restaurantId } = useParams();
   const { restaurant, isLoading } = useGetRestaurant(restaurantId);
-  //const { createCheckoutSession, isLoading: isCheckoutLoading } =
-  //  useCreateCheckoutSession();
+  const { createCheckoutSession, isPending: isCheckoutLoading } =
+    useCreateCheckoutSession();
 
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
@@ -55,10 +55,10 @@ const DetailPage = () => {
         ];
       }
 
-    //  sessionStorage.setItem(
-    //  `cartItems-${restaurantId}`,
-    //    JSON.stringify(updatedCartItems)
-    //  );
+      sessionStorage.setItem(
+      `cartItems-${restaurantId}`,
+        JSON.stringify(updatedCartItems)
+      );
 
       return updatedCartItems;
     });
@@ -100,8 +100,8 @@ const DetailPage = () => {
       },
     };
 
-    //const data = await createCheckoutSession(checkoutData);
-    //window.location.href = data.url;
+    const data = await createCheckoutSession(checkoutData);
+    window.location.href = data.url;
   };
 
   if (isLoading || !restaurant) {
@@ -136,11 +136,11 @@ const DetailPage = () => {
               removeFromCart={removeFromCart}
             />
             <CardFooter>
-              {/* <CheckoutButton
+              <CheckoutButton
                 disabled={cartItems.length === 0}
                 onCheckout={onCheckout}
                 isLoading={isCheckoutLoading}
-              /> */}
+              />
             </CardFooter>
           </Card>
         </div>
