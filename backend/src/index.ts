@@ -15,6 +15,9 @@ app.use(cors({
     allowedHeaders: '*',     
     credentials: true        
   }));
+  app.options('*', (_, res) => {
+    res.sendStatus(204);
+  });
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_CONNECTION_STRING as string)
