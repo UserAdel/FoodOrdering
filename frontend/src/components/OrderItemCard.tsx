@@ -45,6 +45,22 @@ const OrderItemCard = ({ order }: Props) => {
     return `${hours}:${paddedMinutes}`;
   };
 
+  const calculateTotalAmount = () => {
+    if (order.totalAmount) {
+      return order.totalAmount;
+    }
+    
+    // Calculate total from cart items and delivery price
+    const itemsTotal = order.cartItems.reduce((total, item) => {
+      const menuItem = order.restaurant.menuItems.find(
+        (menuItem) => menuItem._id === item.menuItemId
+      );
+      return total + (menuItem?.price || 0) * parseInt(item.quantity);
+    }, 0);
+    
+    return itemsTotal + order.restaurant.deliveryPrice;
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -68,7 +84,7 @@ const OrderItemCard = ({ order }: Props) => {
           <div>
             Total Cost:
             <span className="ml-2 font-normal">
-              £{(order.totalAmount / 100).toFixed(2)}
+              £{(calculateTotalAmount() / 100).toFixed(2)}
             </span>
           </div>
         </CardTitle>
@@ -76,8 +92,8 @@ const OrderItemCard = ({ order }: Props) => {
       </CardHeader>
       <CardContent className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          {order.cartItems.map((cartItem) => (
-            <span>
+          {order.cartItems.map((cartItem, index) => (
+            <span key={`${cartItem.menuItemId}-${cartItem.name}-${index}`}>
               <Badge variant="outline" className="mr-2">
                 {cartItem.quantity}
               </Badge>
@@ -97,7 +113,7 @@ const OrderItemCard = ({ order }: Props) => {
             </SelectTrigger>
             <SelectContent position="popper">
               {ORDER_STATUS.map((status) => (
-                <SelectItem value={status.value}>{status.label}</SelectItem>
+                <SelectItem key={status.value} value={status.value}>{status.label}</SelectItem>
               ))}
             </SelectContent>
           </Select>

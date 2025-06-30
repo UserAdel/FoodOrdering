@@ -40,27 +40,37 @@ const stripeWebhookHandler = async (req: Request, res: Response) => {
 
   try {
     const sig = req.headers["stripe-signature"];
+    console.log("Webhook received, signature:", sig ? "present" : "missing");
+    
     event = STRIPE.webhooks.constructEvent(
       req.body,
       sig as string,
       STRIPE_ENDPOINT_SECRET
     );
+    
+    console.log("Webhook event type:", event.type);
   } catch (error: any) {
-    console.log(error);
+    console.log("Webhook error:", error);
     return res.status(400).send(`Webhook error: ${error.message}`);
   }
 
   if (event.type === "checkout.session.completed") {
+    console.log("Processing checkout.session.completed event");
+    console.log("Event data:", JSON.stringify(event.data.object, null, 2));
+    
     const order = await Order.findById(event.data.object.metadata?.orderId);
+    console.log("Found order:", order ? order._id : "not found");
 
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
 
+    console.log("Updating order totalAmount from:", order.totalAmount, "to:", event.data.object.amount_total);
     order.totalAmount = event.data.object.amount_total;
     order.status = "paid";
 
     await order.save();
+    console.log("Order updated successfully");
   }
 
   res.status(200).send();
