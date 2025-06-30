@@ -7,6 +7,7 @@ import {v2 as cloudinary} from "cloudinary";
 import myResturantRoute from "./routes/MyResturantRoutes";
 import restaurantRoute from "./routes/RestaurantRoutes";
 import orderRoute from "./routes/OrderRoute";
+import testRoute from './routes/testRoute';
 
 const app = express();
 app.use(cors({
@@ -48,7 +49,7 @@ app.get("/", (req, res) => {
     res.send("API is running...");
   });
   
-
+app.use("/api/test", testRoute);
 app.listen(7000, () => {
     console.log(`Server is running on port 7000`);
 });
