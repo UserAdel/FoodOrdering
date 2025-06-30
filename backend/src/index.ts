@@ -10,11 +10,11 @@ import orderRoute from "./routes/OrderRoute";
 
 const app = express();
 app.use(cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true
-}));
+    origin: '*',             
+    methods: '*',            
+    allowedHeaders: '*',     
+    credentials: true        
+  }));
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_CONNECTION_STRING as string)
@@ -41,10 +41,10 @@ app.use("/api/order", orderRoute);
 
 app.use("/api/order/checkout/webhook", express.raw({ type: "*/*" }));
  
-app.get('/test', (req: Request, res: Response) => {
-    res.json({ message: 'Server is running!'});
-});
-
+app.get("/", (req, res) => {
+    res.send("API is running...");
+  });
+  
 
 app.listen(7000, () => {
     console.log(`Server is running on port 7000`);
