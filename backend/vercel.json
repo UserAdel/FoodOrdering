@@ -10,19 +10,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "src/index.ts"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "src/index.ts"
-    }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "headers": [
-    {
-      "source": "/api/(.*)",
+      "dest": "src/index.ts",
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
@@ -41,6 +29,13 @@
           "value": "true"
         }
       ]
+    },
+    {
+      "src": "/(.*)",
+      "dest": "src/index.ts"
     }
-  ]
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
 }
